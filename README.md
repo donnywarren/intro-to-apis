@@ -4,8 +4,9 @@
 - Basic differences between clients and servers
 - Introduce the concept of HTTP GET requests
 - Introduction to APIs
-- Introduction to asynchronous JS and Axios
-- Make our first GET request with Axios
+- Introduction to axios
+- Intro to async / await
+- Make our first GET request with axios
 
 ## Clients and Servers
 The world wide web is basically just an interconnected network of client devices and servers. 
@@ -41,7 +42,7 @@ When we perform one of these four CRUD actions, we're making a an HTTP request t
 
 ![](https://res.cloudinary.com/briandanger/image/upload/v1558470312/Screen_Shot_2019-05-21_at_4.24.21_PM_jgcf1q.png)
 
-The server will "respond" with either a success or error message and by either doing or not doing the action requested. There are a number of factors affecting success that we will discuss at greater length in the future.
+When a user makes one of these requests, the server will "respond" with either a success or error message and by either doing or not doing the action requested. There are a number of factors affecting success that we will discuss at greater length in the future.
 
 We'll need to wait until we learn backend database languages before we can Create, Update, or Delete data from a database; however, fortunately, we can Read existing data with just JavaScript, so for now, we'll focus on how we can us JS to request data from servers that our users can read, watch, and listen to.
 
@@ -55,21 +56,164 @@ Fortunately, we have [the Weather API](https://openweathermap.org/api). When you
 
 There are LOADS of APIs on the web, ranging from those containing extremely helpful information like the weather, financial data, and government data to those containing really fun info like a database of Jeopardy questions or breweries or Star Wars info.
 
-Okay, you've sold us... APIs sound great. How do we use them?
+So, how do we actually c APIs?
 
 ## Axios
-Axios is a very popular JavaScript library you can use to perform HTTP requests. 
+`Axios` is a very popular JavaScript library you can use to perform HTTP requests. 
 
-Because axios is a library, you have to first add it to your project. There are two ways to do this:
-- You can install it directly through the command line using `npm install axios` 
-- or you can link to the axios library in the head section of your HTML page with `<script src="https://unpkg.com/axios/dist/axios.min.js"></script>`.
+Because `axios` is a library, you have to first add it to your project. You can link to the `axios` library in the head section of your HTML page with `<script src="https://unpkg.com/axios/dist/axios.min.js"></script>`. Make sure to place the link to `axios` *before* the link to your main JS document or it won't work.
 
-Once you've added axios to your project, you'll have access to the axios object and axios specific methods. In particular, you'll have quick methods for all four of our CRUD actions / HTTP request methods:
+Once you've added `axios` to your project, you'll have access to the `axios object`. The basic version of an `axios` HTTP request looks something like the following:
+
+```
+axios({
+    url: 'http://www.yourserver.com/api/neat_stuff',
+    method: 'post',
+    headers: {
+    'content-type': 'multipart/form-data',
+    },
+    data: form,
+});
+```
+
+The pieces we're seeing here are:
+1. URL Endpoint
+2. HTTP Method
+3. Headers
+4. Body
+
+Depending on the HTTP method we're using and what data we're trying to send or receive, we don't necessarily have to use all four of these pieces in our `axios` call.
+
+Once you've gained some familiarity with `axios`, you may want to try the shorthand syntax. `Axios` has shorthand methods for all four of our CRUD actions / HTTP request methods:
 
 - you can CREATE with `axios.post()`
-- you can READ with `axios.get()`
+- you can READ with `axios.get()` `//<-- we'll be focusing on this one for now`
 - you can UPDATE with `axios.put()`
-- you can DELETE with `axios.delete()`
+- you can DELETE with `axios.delete()` 
+
+When using these shorthand `axios` methods, you'll enter the endpoint URL and the header / body data as arguments. For example:
+
+```
+axios.get('http://www.url.com/api/endpoint', {
+  params: {
+    id: 1,
+    name: Brian
+  }
+})
+```
+
+## Asynchronous JS
+So far, most of the javascript we've been writing is **synchronous**. In programming, we can simplify the definition of synchronous code as “a bunch of statements in sequence”; so each statement in your code is executed one after the other. This means each statement has to wait for the previous one to finish executing. For example, if we had the following code:
+
+```
+const myFunction = () => {
+  console.log('First');
+  console.log('Second');
+  console.log('Third');
+}
+```
+
+The console would print “First”, “Second”, “Third”. However, there are some javascript actions that can potentially take a long time, and it may not make sense for the entire app to wait for that action to be completed. 
+
+Thus, when we use javascript that takes a long time to execute, such as `setTimeout()` or `setInterval()` or, of course, `axios` API calls, they run asynchronously by default. That means the following code will print “First”, “Third”, “Second”. 
+
+```
+const myFunction = () => {
+  console.log("first")
+  axios.get('https://dog.ceo/api/breeds/list/all').then(function() {
+    console.log("second");
+  })
+  console.log("third")
+ }
+```
+
+Sometimes, however, you actually want your app to wait. Fortunately, for those cases, we have `async` and `await`.
+
+## Async / Await
+The keyword `await` makes JavaScript wait until a line of code completely finishes executing. However, you can only use `await` inside of an `async` function. How do we turn a function into an `async` function? 
+
+Easy! We just put the word "async" in front of the word "function". With arrow functions, we just write "async" before the parenthesis, like this: `async () => { etc...}`. So, if we use `async` and `await` on our previous example, the console will once again print “First”, “Second”, “Third” in proper order.
+
+```
+const myFunction = async () => {
+  console.log("first")
+  await axios.get('https://dog.ceo/api/breeds/list/all').then(function() {
+    console.log("second");
+  })
+  console.log("third")
+ }
+```
+
+Usually the way that we'll use this in real life is to `await` while we store the value of an `axios` call to a variable. This lets us get rid of the `.then` part from above, resulting in a cleaner syntax. For example:
+
+```
+const getBreeds = async () => {
+  const dogbreeds = await axios.get('https://dog.ceo/api/breeds/list/all')
+  console.log(dogbreeds)
+ }
+```
+
+## WE DO: We're Getting a Dog!
+Let's build a simple app that let's us enter a dog breed and uses [The Dog API](https://dog.ceo/dog-api/documentation/) to return a random image of that breed. Ready? Let's go!
+
+1. First, `mkdir` a new project folder and `cd` into that folder. Then, `touch` an `index.html` and a `script.js` in that folder. 
+2. Set up your HTML boilerplate. Inside of the `<body>`, enter the following code and save your `index.html` page:
+
+```
+<header>
+  <input type="text">
+  <button>Dog Me</button>
+</header>
+<div>
+
+</div>
+```
+
+3. Cool! Now let's do some Javascript :) We'll start by assigning our `<button>`, `<input>`, and `<div>` elements to variables. 
+
+```
+const button = document.querySelector("button")
+const breedInput = document.querySelector("input")
+const imageDiv = document.querySelector("div")
+```
+
+4. Next, let's add a click event listener to the button, with an anonymous arrow function:
+
+```
+button.addEventListener('click', async () => {
+ 
+});
+```
+
+5. Inside our click event's function, let's first grab the value of the `breedInput`.
+
+```
+let breed = breedInput.value
+```
+
+6. Great! Now let's make an `axios` call to The Dog API and save it to a variable called `response`. We're going to hit the [Browse breed lists](https://dog.ceo/dog-api/breeds-list) endpoint. Our goal is to get a link to a random image of a dog of the breed the user entered.
+
+```
+let response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random`)
+```
+
+7. If you `console.log(response)` and dig through the data, you'll find the image link you need inside of response > data > message. Let's save that to a variable.
+
+```
+let dogPic = response.data.message
+```
+
+8. Finally, let's update the DOM with our new image link by changing the inner HTML of our image div:
+
+```
+imageDiv.innerHTML = `<img src=${dogPic}>`
+```
+
+## We Did It!!!!
+If you're feeling confused about anything, don't worry! This is just our introduction to APIs. We'll be exploring them at much further length very soon. APIs can be difficult and some are more tricky to use than others, but we hope this helps you feel like you have a basic understanding of the pieces necessary for a successful axios API call.
+
+![](http://image.blingee.com/images19/content/output/000/000/000/7ae/767642058_127887.gif)
+
 
 
 
