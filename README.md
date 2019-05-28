@@ -212,7 +212,9 @@ imageDiv.innerHTML = `<img src=${dogPic}>`
 ## We Did It!!!!
 If you're feeling confused about anything, don't worry! This is just our introduction to APIs. We'll be exploring them at much further length very soon. APIs can be difficult and some are more tricky to use than others, but we hope this helps you feel like you have a basic understanding of the pieces necessary for a successful axios API call.
 
+
 ![](http://image.blingee.com/images19/content/output/000/000/000/7ae/767642058_127887.gif)
+
 
 
 
