@@ -185,7 +185,7 @@ button.addEventListener('click', async () => {
 });
 ```
 
-5. Inside our click event's function, let's first grab the value of the `breedInput`.
+5. **Inside** our click event's function, let's first grab the value of the `breedInput`.
 
 ```
 let breed = breedInput.value
@@ -214,6 +214,7 @@ If you're feeling confused about anything, don't worry! This is just our introdu
 
 
 ![](http://image.blingee.com/images19/content/output/000/000/000/7ae/767642058_127887.gif)
+test
 
 
 
