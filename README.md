@@ -56,7 +56,7 @@ Fortunately, we have [the Weather API](https://openweathermap.org/api). When you
 
 There are LOADS of APIs on the web, ranging from those containing extremely helpful information like the weather, financial data, and government data to those containing really fun info like a database of Jeopardy questions or breweries or Star Wars info.
 
-So, how do we actually c APIs?
+So, how do we actually use APIs?
 
 ## Axios
 `Axios` is a very popular JavaScript library you can use to perform HTTP requests. 
