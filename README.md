@@ -65,7 +65,7 @@ Because `axios` is a library, you have to first add it to your project. You can 
 
 Once you've added `axios` to your project, you'll have access to the `axios object`. The basic version of an `axios` HTTP request looks something like the following:
 
-```
+```js
 axios({
     url: 'http://www.yourserver.com/api/neat_stuff',
     method: 'post',
@@ -93,7 +93,7 @@ Once you've gained some familiarity with `axios`, you may want to try the shorth
 
 When using these shorthand `axios` methods, you'll enter the endpoint URL and the header / body data as arguments. For example:
 
-```
+```j
 axios.get('http://www.url.com/api/endpoint', {
   params: {
     id: 1,
@@ -105,7 +105,7 @@ axios.get('http://www.url.com/api/endpoint', {
 ## Asynchronous JS
 So far, most of the javascript we've been writing is **synchronous**. In programming, we can simplify the definition of synchronous code as “a bunch of statements in sequence”; so each statement in your code is executed one after the other. This means each statement has to wait for the previous one to finish executing. For example, if we had the following code:
 
-```
+```js
 const myFunction = () => {
   console.log('First');
   console.log('Second');
@@ -117,7 +117,7 @@ The console would print “First”, “Second”, “Third”. However, there a
 
 Thus, when we use javascript that takes a long time to execute, such as `setTimeout()` or `setInterval()` or, of course, `axios` API calls, they run asynchronously by default. That means the following code will print “First”, “Third”, “Second”. 
 
-```
+```js
 const myFunction = () => {
   console.log("first")
   axios.get('https://dog.ceo/api/breeds/list/all').then(function() {
@@ -134,7 +134,7 @@ The keyword `await` makes JavaScript wait until a line of code completely finish
 
 Easy! We just put the word "async" in front of the word "function". With arrow functions, we just write "async" before the parenthesis, like this: `async () => { etc...}`. So, if we use `async` and `await` on our previous example, the console will once again print “First”, “Second”, “Third” in proper order.
 
-```
+```js
 const myFunction = async () => {
   console.log("first")
   await axios.get('https://dog.ceo/api/breeds/list/all').then(function() {
@@ -146,7 +146,7 @@ const myFunction = async () => {
 
 Usually the way that we'll use this in real life is to `await` while we store the value of an `axios` call to a variable. This lets us get rid of the `.then` part from above, resulting in a cleaner syntax. For example:
 
-```
+```js
 const getBreeds = async () => {
   const dogbreeds = await axios.get('https://dog.ceo/api/breeds/list/all')
   console.log(dogbreeds)
@@ -159,7 +159,7 @@ Let's build a simple app that let's us enter a dog breed and uses [The Dog API](
 1. First, `mkdir` a new project folder and `cd` into that folder. Then, `touch` an `index.html` and a `script.js` in that folder. 
 2. Set up your HTML boilerplate. Inside of the `<body>`, enter the following code and save your `index.html` page:
 
-```
+```html
 <header>
   <input type="text">
   <button>Dog Me</button>
@@ -171,7 +171,7 @@ Let's build a simple app that let's us enter a dog breed and uses [The Dog API](
 
 3. Cool! Now let's do some Javascript :) We'll start by assigning our `<button>`, `<input>`, and `<div>` elements to variables. 
 
-```
+```js
 const button = document.querySelector("button")
 const breedInput = document.querySelector("input")
 const imageDiv = document.querySelector("div")
@@ -179,7 +179,7 @@ const imageDiv = document.querySelector("div")
 
 4. Next, let's add a click event listener to the button, with an anonymous arrow function:
 
-```
+```js
 button.addEventListener('click', async () => {
  
 });
@@ -187,25 +187,25 @@ button.addEventListener('click', async () => {
 
 5. **Inside** our click event's function, let's first grab the value of the `breedInput`.
 
-```
+```js
 let breed = breedInput.value
 ```
 
 6. Great! Now let's make an `axios` call to The Dog API and save it to a variable called `response`. We're going to hit the [Browse breed lists](https://dog.ceo/dog-api/breeds-list) endpoint. Our goal is to get a link to a random image of a dog of the breed the user entered.
 
-```
+```js
 let response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random`)
 ```
 
 7. If you `console.log(response)` and dig through the data, you'll find the image link you need inside of response > data > message. Let's save that to a variable.
 
-```
+```js
 let dogPic = response.data.message
 ```
 
 8. Finally, let's update the DOM with our new image link by changing the inner HTML of our image div:
 
-```
+```js
 imageDiv.innerHTML = `<img src=${dogPic}>`
 ```
 
