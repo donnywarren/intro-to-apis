@@ -94,7 +94,7 @@ Once you've gained some familiarity with `axios`, you may want to try the shorth
 When using these shorthand `axios` methods, you'll enter the endpoint URL and the header / body data as arguments. For example:
 
 ```j
-axios.get('http://www.url.com/api/endpoint', {
+axios.post('http://www.url.com/api/endpoint', {
   params: {
     id: 1,
     name: Brian
